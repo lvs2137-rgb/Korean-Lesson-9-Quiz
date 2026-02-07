@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 9 Comprehensive Quiz - 생일 (Birthday)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .main-menu {
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #333;
+            margin: 30px 0 20px;
+            font-weight: bold;
+        }
+
+        .menu-buttons {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .menu-btn {
+            padding: 20px;
+            font-size: 1.2em;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .menu-btn:hover {
+            background: #764ba2;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-btn-secondary {
+            background: #95a5f5;
+        }
+
+        .menu-btn-secondary:hover {
+            background: #667eea;
+        }
+
+        .quiz-area {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .question-text {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .word-type {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5em;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: inherit;
+        }
+
+        .input-answer:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        .override-btn {
+            padding: 10px 20px;
+            font-size: 0.95em;
+            background: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .override-btn:hover {
+            background: #f57c00;
+        }
+
+        .override-btn.show {
+            display: inline-block;
+        }
+
+        .answer-comparison {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+
+        .answer-comparison strong {
+            color: #667eea;
+        }
+
+        .next-btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background: #764ba2;
+        }
+
+        .next-btn.show {
+            display: inline-block;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+        }
+
+        .score-display {
+            font-size: 4em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0;
+        }
+
+        .score-message {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .result-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .result-btn.menu {
+            background: #667eea;
+        }
+
+        .result-btn.menu:hover {
+            background: #764ba2;
+        }
+
+        .result-btn.retry {
+            background: #ff9800;
+        }
+
+        .result-btn.retry:hover {
+            background: #f57c00;
+        }
+
+        .result-btn.missed {
+            background: #e91e63;
+        }
+
+        .result-btn.missed:hover {
+            background: #c2185b;
+        }
+
+        .result-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .hint {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .sentence-context {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px solid #667eea;
+            margin: 0 5px;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Lesson 9 Comprehensive Quiz</h1>
+            <p class="subtitle">9과 생일 (Birthday)</p>
+        </div>
+
+        <!-- Main Menu -->
+        <div class="main-menu" id="mainMenu">
+            <div class="section-title">📚 Vocabulary Quizzes</div>
+            <div class="menu-buttons">
+                <button class="menu-btn" onclick="startQuiz('vocab', 'korean-to-english')">
+                    Vocabulary: 한국어 → English
+                </button>
+                <button class="menu-btn" onclick="startQuiz('vocab', 'english-to-korean')">
+                    Vocabulary: English → 한국어
+                </button>
+                <button class="menu-btn" onclick="startQuiz('vocab', 'mixed')">
+                    Vocabulary: Mixed
+                </button>
+            </div>
+
+            <div class="section-title">✏️ Grammar Quizzes</div>
+            <div class="menu-buttons">
+                <button class="menu-btn menu-btn-secondary" onclick="startQuiz('grammar', 'particles')">
+                    Grammar: Particles (한테/한테서/께/께서)
+                </button>
+                <button class="menu-btn menu-btn-secondary" onclick="startQuiz('grammar', 'honorifics')">
+                    Grammar: Honorifics (Plain vs Honorific)
+                </button>
+                <button class="menu-btn menu-btn-secondary" onclick="startQuiz('grammar', 'modifiers')">
+                    Grammar: Adjective Modifiers ~(으)ㄴ
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Area -->
+        <div class="quiz-area" id="quizArea">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number" id="questionNumber"></div>
+                <div class="word-type" id="wordType"></div>
+                <div id="sentenceContext" class="sentence-context" style="display: none;"></div>
+                <div class="question-text" id="questionText"></div>
+                
+                <input type="text" class="input-answer" id="answerInput" placeholder="Type your answer..." autocomplete="off">
+                <div class="hint" id="hint"></div>
+
+                <div class="feedback" id="feedback"></div>
+                <button class="override-btn" id="overrideBtn" onclick="overrideAnswer()">I Got It Right - Override</button>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results" id="results">
+            <h2>Quiz Complete! 🎉</h2>
+            <div class="score-display" id="scoreDisplay"></div>
+            <div class="score-message" id="scoreMessage"></div>
+            <div class="result-buttons">
+                <button class="result-btn menu" onclick="returnToMenu()">Return to Menu</button>
+                <button class="result-btn retry" onclick="retryQuiz()">Retry Same Quiz</button>
+                <button class="result-btn missed" id="missedBtn" onclick="retryMissed()">Practice Missed Only</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const vocabulary = [
+            // Nouns
+            { korean: '건물', english: 'building', type: 'NOUN' },
+            { korean: '돈', english: 'money', type: 'NOUN' },
+            { korean: '돌', english: 'the first birthday', type: 'NOUN' },
+            { korean: '며칠', english: 'what date; a few days', type: 'NOUN' },
+            { korean: '모자', english: 'cap, hat', type: 'NOUN' },
+            { korean: '번호', english: 'number', type: 'NOUN' },
+            { korean: '올해', english: 'this year', type: 'NOUN' },
+            { korean: '이메일', english: 'e-mail', type: 'NOUN' },
+            { korean: '잔치', english: 'feast, party', type: 'NOUN' },
+            { korean: '카드', english: 'card', type: 'NOUN' },
+            { korean: '편지', english: 'letter', type: 'NOUN' },
+            { korean: '가족', english: 'family', type: 'NOUN' },
+            { korean: '나이', english: 'age', type: 'NOUN' },
+            { korean: '딸', english: 'daughter', type: 'NOUN' },
+            { korean: '사진', english: 'photo; picture', type: 'NOUN' },
+            { korean: '생일', english: 'birthday', type: 'NOUN' },
+            { korean: '아들', english: 'son', type: 'NOUN' },
+            { korean: '작년', english: 'last year', type: 'NOUN' },
+            { korean: '장갑', english: 'gloves', type: 'NOUN' },
+            { korean: '할머니', english: 'grandmother', type: 'NOUN' },
+            { korean: '할아버지', english: 'grandfather', type: 'NOUN' },
+            { korean: '스웨터', english: 'sweater', type: 'NOUN' },
+            { korean: '생신', english: 'birthday (honorific)', type: 'NOUN (HON)', plain: '생일' },
+            { korean: '댁', english: 'home; house (honorific)', type: 'NOUN (HON)', plain: '집' },
+            { korean: '성함', english: 'name (honorific)', type: 'NOUN (HON)', plain: '이름' },
+            { korean: '연세', english: 'age (honorific)', type: 'NOUN (HON)', plain: '나이' },
+            
+            // Verbs
+            { korean: '보내다', english: 'to send; to spend (time)', type: 'VERB' },
+            { korean: '축하하다', english: 'to congratulate', type: 'VERB' },
+            { korean: '찍다', english: 'to take (a photo)', type: 'VERB' },
+            { korean: '죽다', english: 'to die', type: 'VERB' },
+            { korean: '드리다', english: 'to give (honorific)', type: 'VERB (HON)', plain: '주다' },
+            { korean: '드시다', english: 'to eat (honorific)', type: 'VERB (HON)', plain: '먹다' },
+            { korean: '주무시다', english: 'to sleep (honorific)', type: 'VERB (HON)', plain: '자다' },
+            { korean: '돌아가시다', english: 'to pass away (honorific)', type: 'VERB (HON)', plain: '죽다' },
+            
+            // Adjectives
+            { korean: '길다', english: 'to be long', type: 'ADJECTIVE' },
+            { korean: '짧다', english: 'to be short', type: 'ADJECTIVE' },
+            { korean: '건강하다', english: 'to be healthy', type: 'ADJECTIVE' },
+            { korean: '즐겁다', english: 'to be joyful', type: 'ADJECTIVE' },
+            
+            // Adverbs
+            { korean: '모두', english: 'all', type: 'ADVERB' },
+            
+            // Counters
+            { korean: '살', english: 'years old', type: 'COUNTER' },
+            { korean: '분', english: 'people (honorific)', type: 'COUNTER (HON)', plain: '명' },
+        ];
+
+        // Grammar questions
+        const particleQuestions = [
+            { sentence: '린다가 마이클_____ 전화했어요.', answer: '한테', hint: 'to a person' },
+            { sentence: '저는 어제 한국___ 전화했어요.', answer: '에', hint: 'to a place' },
+            { sentence: '제니가 리사_____ 생일 선물을 줬어요.', answer: '한테', hint: 'to a person' },
+            { sentence: '어제 친구_______ 전화왔어요.', answer: '한테서', hint: 'from a person' },
+            { sentence: '라디오_____ 뉴스를 들어요.', answer: '에서', hint: 'from a place/source' },
+            { sentence: '폴은 부모님___ 편지를 써요.', answer: '께', hint: 'to (honorific)' },
+            { sentence: '반 친구_______ 이메일이 왔어요.', answer: '한테서', hint: 'from a classmate' },
+            { sentence: '할머니_____ 선물을 드렸어요.', answer: '께', hint: 'to (honorific)' },
+            { sentence: '교수님_______ 책을 받았어요.', answer: '께', hint: 'from (honorific)' },
+            { sentence: '동생_____ 카드를 보냈어요.', answer: '한테', hint: 'to (younger sibling)' },
+            { sentence: '선생님_____ 감사합니다.', answer: '께', hint: 'to (teacher - honorific)' },
+            { sentence: '친구_____ 편지를 받았어요.', answer: '한테서', hint: 'from (friend)' },
+            { sentence: '할아버지_______ 용돈을 받았어요.', answer: '께', hint: 'from (grandfather - honorific)' },
+            { sentence: '어머니_____ 전화해요.', answer: '께', hint: 'to (mother - honorific)' },
+            { sentence: '아버지_______ 건강하세요.', answer: '께서', hint: 'subject particle (honorific)' },
+        ];
+
+        const honorificQuestions = [
+            { sentence: '할머니께서 식사를 _____. (먹다)', answer: '드세요', type: 'verb', hint: 'honorific form of 먹다' },
+            { sentence: '할아버지_____ 지금 _____. (자다)', answer: '께서 주무세요', type: 'particle+verb', hint: 'subject particle + honorific 자다' },
+            { sentence: '선생님_____ 책을 _____. (읽다)', answer: '께서 읽으세요', type: 'particle+verb', hint: 'subject particle + honorific form' },
+            { sentence: '부모님께 선물을 _____. (주다)', answer: '드렸어요', type: 'verb', hint: 'honorific past tense of 주다' },
+            { sentence: '할머니 _____가 어떻게 되세요? (나이)', answer: '연세', type: 'noun', hint: 'honorific word for age' },
+            { sentence: '교수님 _____이 어떻게 되세요? (이름)', answer: '성함', type: 'noun', hint: 'honorific word for name' },
+            { sentence: '어머니 _____에 가셨어요. (집)', answer: '댁', type: 'noun', hint: 'honorific word for house' },
+            { sentence: '할아버지 _____이 언제세요? (생일)', answer: '생신', type: 'noun', hint: 'honorific word for birthday' },
+            { sentence: '선생님께서 _____. (죽다)', answer: '돌아가셨어요', type: 'verb', hint: 'honorific form of 죽다' },
+            { sentence: '할머니께서 건강_____. (하다)', answer: '하세요', type: 'verb', hint: 'honorific present tense' },
+            { sentence: '부모님께 전화를 _____. (하다)', answer: '드렸어요', type: 'verb', hint: 'or 했어요 - both acceptable' },
+            { sentence: '교수님께서 오늘 _____? (오다)', answer: '오세요', type: 'verb', hint: 'honorific present/future' },
+        ];
+
+        const modifierQuestions = [
+            { adjective: '좋다', answer: '좋은', type: 'regular-C', example: '좋은 차 (nice car)' },
+            { adjective: '많다', answer: '많은', type: 'regular-C', example: '많은 사람 (many people)' },
+            { adjective: '작다', answer: '작은', type: 'regular-C', example: '작은 집 (small house)' },
+            { adjective: '크다', answer: '큰', type: 'regular-V', example: '큰 가방 (big bag)' },
+            { adjective: '싸다', answer: '싼', type: 'regular-V', example: '싼 옷 (cheap clothes)' },
+            { adjective: '예쁘다', answer: '예쁜', type: 'regular-V', example: '예쁜 꽃 (pretty flower)' },
+            { adjective: '춥다', answer: '추운', type: 'ㅂ-irregular', example: '추운 날씨 (cold weather)' },
+            { adjective: '덥다', answer: '더운', type: 'ㅂ-irregular', example: '더운 여름 (hot summer)' },
+            { adjective: '쉽다', answer: '쉬운', type: 'ㅂ-irregular', example: '쉬운 문제 (easy problem)' },
+            { adjective: '어렵다', answer: '어려운', type: 'ㅂ-irregular', example: '어려운 시험 (difficult exam)' },
+            { adjective: '가깝다', answer: '가까운', type: 'ㅂ-irregular', example: '가까운 곳 (nearby place)' },
+            { adjective: '좁다', answer: '좁은', type: 'ㅂ-regular', example: '좁은 길 (narrow road)' },
+            { adjective: '짧다', answer: '짧은', type: 'ㅂ-regular', example: '짧은 머리 (short hair)' },
+            { adjective: '넓다', answer: '넓은', type: 'ㅂ-regular', example: '넓은 방 (wide room)' },
+            { adjective: '멀다', answer: '먼', type: 'ㄹ-irregular', example: '먼 곳 (far place)' },
+            { adjective: '길다', answer: '긴', type: 'ㄹ-irregular', example: '긴 머리 (long hair)' },
+            { adjective: '맛있다', answer: '맛있는', type: 'special-있다', example: '맛있는 음식 (tasty food)' },
+            { adjective: '맛없다', answer: '맛없는', type: 'special-있다', example: '맛없는 피자 (bad pizza)' },
+            { adjective: '재미있다', answer: '재미있는', type: 'special-있다', example: '재미있는 영화 (fun movie)' },
+            { adjective: '재미없다', answer: '재미없는', type: 'special-없다', example: '재미없는 책 (boring book)' },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let quizCategory = '';
+        let quizType = '';
+        let quizQuestions = [];
+        let currentQuestion = null;
+        let missedQuestions = [];
+        let currentAnswerLang = '';
+
+        // Enter key event listener
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const nextBtn = document.getElementById('nextBtn');
+                const answerInput = document.getElementById('answerInput');
+                
+                if (nextBtn.classList.contains('show')) {
+                    nextQuestion();
+                } else if (answerInput === document.activeElement && answerInput.value.trim()) {
+                    checkAnswer();
+                }
+            }
+        });
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase().trim().replace(/[;,]/g, '');
+        }
+
+        function startQuiz(category, type) {
+            quizCategory = category;
+            quizType = type;
+            currentQuestionIndex = 0;
+            score = 0;
+            missedQuestions = [];
+            
+            if (category === 'vocab') {
+                quizQuestions = shuffleArray([...vocabulary]);
+            } else if (category === 'grammar') {
+                if (type === 'particles') {
+                    quizQuestions = shuffleArray([...particleQuestions]);
+                } else if (type === 'honorifics') {
+                    quizQuestions = shuffleArray([...honorificQuestions]);
+                } else if (type === 'modifiers') {
+                    quizQuestions = shuffleArray([...modifierQuestions]);
+                }
+            }
+            
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('quizArea').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+
+            currentQuestion = quizQuestions[currentQuestionIndex];
+            
+            // Update progress
+            const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            // Update question number
+            document.getElementById('questionNumber').textContent = 
+                `Question ${currentQuestionIndex + 1} of ${quizQuestions.length}`;
+            
+            // Clear previous state
+            document.getElementById('feedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('nextBtn').classList.remove('show');
+            document.getElementById('overrideBtn').classList.remove('show');
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').disabled = false;
+            document.getElementById('sentenceContext').style.display = 'none';
+            document.getElementById('hint').textContent = '';
+            
+            if (quizCategory === 'vocab') {
+                showVocabQuestion();
+            } else if (quizCategory === 'grammar') {
+                showGrammarQuestion();
+            }
+            
+            // Focus on input
+            setTimeout(() => document.getElementById('answerInput').focus(), 100);
+        }
+
+        function showVocabQuestion() {
+            const vocab = currentQuestion;
+            document.getElementById('wordType').textContent = vocab.type;
+            document.getElementById('wordType').style.display = 'inline-block';
+            
+            // Determine question direction
+            if (quizType === 'korean-to-english') {
+                currentAnswerLang = 'english';
+                document.getElementById('questionText').textContent = vocab.korean;
+                document.getElementById('hint').textContent = 'Type the English meaning';
+            } else if (quizType === 'english-to-korean') {
+                currentAnswerLang = 'korean';
+                document.getElementById('questionText').textContent = vocab.english;
+                document.getElementById('hint').textContent = 'Type the Korean word (in Hangul)';
+            } else {
+                // Mixed mode
+                if (Math.random() < 0.5) {
+                    currentAnswerLang = 'english';
+                    document.getElementById('questionText').textContent = vocab.korean;
+                    document.getElementById('hint').textContent = 'Type the English meaning';
+                } else {
+                    currentAnswerLang = 'korean';
+                    document.getElementById('questionText').textContent = vocab.english;
+                    document.getElementById('hint').textContent = 'Type the Korean word (in Hangul)';
+                }
+            }
+        }
+
+        function showGrammarQuestion() {
+            document.getElementById('wordType').style.display = 'none';
+            
+            if (quizType === 'particles') {
+                const q = currentQuestion;
+                document.getElementById('questionText').textContent = q.sentence;
+                document.getElementById('hint').textContent = `Hint: ${q.hint}`;
+            } else if (quizType === 'honorifics') {
+                const q = currentQuestion;
+                document.getElementById('questionText').textContent = q.sentence;
+                document.getElementById('hint').textContent = `Hint: ${q.hint}`;
+            } else if (quizType === 'modifiers') {
+                const q = currentQuestion;
+                document.getElementById('questionText').textContent = 
+                    `Convert to noun-modifying form: ${q.adjective}`;
+                document.getElementById('hint').textContent = `Example: ${q.example}`;
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value;
+            if (!userAnswer.trim()) return;
+            
+            let isCorrect = false;
+            let correctAnswer = '';
+            
+            if (quizCategory === 'vocab') {
+                correctAnswer = currentQuestion[currentAnswerLang];
+                const normalized = normalizeAnswer(userAnswer);
+                const normalizedCorrect = normalizeAnswer(correctAnswer);
+                
+                isCorrect = normalized === normalizedCorrect;
+            } else if (quizCategory === 'grammar') {
+                if (quizType === 'honorifics' && currentQuestion.type === 'particle+verb') {
+                    // For particle+verb questions, accept variations
+                    const answers = currentQuestion.answer.split(' ');
+                    const userWords = userAnswer.trim().split(/\s+/);
+                    isCorrect = userWords.length === 2 && 
+                                normalizeAnswer(userWords[0]) === normalizeAnswer(answers[0]) &&
+                                normalizeAnswer(userWords[1]) === normalizeAnswer(answers[1]);
+                } else if (quizType === 'honorifics' && currentQuestion.sentence.includes('전화를')) {
+                    // For 전화를 드리다/하다 both are acceptable
+                    isCorrect = normalizeAnswer(userAnswer) === normalizeAnswer(currentQuestion.answer) ||
+                                normalizeAnswer(userAnswer) === '했어요';
+                } else {
+                    isCorrect = normalizeAnswer(userAnswer) === normalizeAnswer(currentQuestion.answer);
+                }
+                correctAnswer = currentQuestion.answer;
+            }
+            
+            document.getElementById('answerInput').disabled = true;
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.add('show');
+            
+            const overrideBtn = document.getElementById('overrideBtn');
+            
+            if (isCorrect) {
+                score++;
+                feedback.classList.add('correct');
+                
+                // For English to Korean vocab, show answer comparison even when correct
+                if (quizCategory === 'vocab' && currentAnswerLang === 'korean') {
+                    feedback.innerHTML = `✓ Correct! 잘했어요!<br>
+                        <div class="answer-comparison">
+                            <strong>You answered:</strong> ${userAnswer}<br>
+                            <strong>Expected answer:</strong> ${correctAnswer}
+                        </div>`;
+                } else {
+                    feedback.textContent = '✓ Correct! 잘했어요!';
+                }
+                overrideBtn.classList.remove('show');
+            } else {
+                feedback.classList.add('incorrect');
+                
+                // Show answer comparison for English to Korean vocab quiz
+                if (quizCategory === 'vocab' && currentAnswerLang === 'korean') {
+                    feedback.innerHTML = `✗ Incorrect.<br>
+                        <div class="answer-comparison">
+                            <strong>You answered:</strong> ${userAnswer}<br>
+                            <strong>Correct answer:</strong> ${correctAnswer}
+                        </div>`;
+                    overrideBtn.classList.add('show');
+                } else {
+                    feedback.textContent = `✗ Incorrect. The correct answer is: ${correctAnswer}`;
+                    overrideBtn.classList.remove('show');
+                }
+                
+                // Add to missed questions initially (will be removed if overridden)
+                if (!missedQuestions.includes(currentQuestion)) {
+                    missedQuestions.push(currentQuestion);
+                }
+            }
+            
+            document.getElementById('nextBtn').classList.add('show');
+        }
+
+        function overrideAnswer() {
+            const feedback = document.getElementById('feedback');
+            const overrideBtn = document.getElementById('overrideBtn');
+            
+            // Change feedback to correct
+            feedback.classList.remove('incorrect');
+            feedback.classList.add('correct');
+            feedback.textContent = '✓ Override accepted! Marked as correct. 잘했어요!';
+            
+            // Hide override button
+            overrideBtn.classList.remove('show');
+            
+            // Add to score
+            score++;
+            
+            // Remove from missed questions
+            const index = missedQuestions.indexOf(currentQuestion);
+            if (index > -1) {
+                missedQuestions.splice(index, 1);
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('quizArea').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            document.getElementById('scoreDisplay').textContent = `${score} / ${quizQuestions.length}`;
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = '🌟 Outstanding! 대단해요!';
+            } else if (percentage >= 80) {
+                message = '👏 Great job! 잘했어요!';
+            } else if (percentage >= 70) {
+                message = '👍 Good work! 좋아요!';
+            } else if (percentage >= 60) {
+                message = '📚 Keep studying! 화이팅!';
+            } else {
+                message = '💪 Practice makes perfect! 힘내세요!';
+            }
+            
+            document.getElementById('scoreMessage').textContent = message;
+            
+            // Enable/disable missed questions button
+            const missedBtn = document.getElementById('missedBtn');
+            if (missedQuestions.length === 0) {
+                missedBtn.disabled = true;
+                missedBtn.textContent = 'Practice Missed Only (None!)';
+            } else {
+                missedBtn.disabled = false;
+                missedBtn.textContent = `Practice Missed Only (${missedQuestions.length})`;
+            }
+        }
+
+        function returnToMenu() {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'block';
+        }
+
+        function retryQuiz() {
+            startQuiz(quizCategory, quizType);
+        }
+
+        function retryMissed() {
+            if (missedQuestions.length === 0) return;
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            quizQuestions = shuffleArray([...missedQuestions]);
+            missedQuestions = [];
+            
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('quizArea').style.display = 'block';
+            
+            showQuestion();
+        }
+    </script>
+</body>
+</html>
